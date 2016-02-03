@@ -51,9 +51,21 @@ module.exports = function (babel) {
             if (t.isJSXElement(argument)) {
                 var openingElement = argument.openingElement;
 
-                // add the attribute
-                var jSXAttribute = t.jSXAttribute(t.jSXIdentifier(QA_DISPLAYNAME_IDENTIFIER), t.jSXExpressionContainer(stringLiteralDisplayName));
-                openingElement.attributes.push(jSXAttribute);
+                // update or add the displayname. could already be set by us earlier (if there are multiple components in a file).
+                // if it's here already, update it; else add it
+                var displayNameJSXExpression = t.jSXExpressionContainer(stringLiteralDisplayName);
+                var foundDisplayName = false;
+                openingElement.attributes.forEach(function (attr) {
+                    if (attr.name.name === QA_DISPLAYNAME_IDENTIFIER) {
+                        foundDisplayName = true;
+                        attr.value = displayNameJSXExpression;
+                    }
+                });
+
+                if (!foundDisplayName) {
+                    var jSXAttribute = t.jSXAttribute(t.jSXIdentifier(QA_DISPLAYNAME_IDENTIFIER), displayNameJSXExpression);
+                    openingElement.attributes.push(jSXAttribute);                    
+                }
 
                 // add proptype attributes
                 props.forEach(function (prop) {
