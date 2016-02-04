@@ -56,7 +56,8 @@ module.exports = function (babel) {
                 var displayNameJSXExpression = t.jSXExpressionContainer(stringLiteralDisplayName);
                 var foundDisplayName = false;
                 openingElement.attributes.forEach(function (attr) {
-                    if (attr.name.name === QA_DISPLAYNAME_IDENTIFIER) {
+
+                    if (t.isJSXAttribute(attr) && attr.name.name === QA_DISPLAYNAME_IDENTIFIER) {
                         foundDisplayName = true;
                         attr.value = displayNameJSXExpression;
                     }

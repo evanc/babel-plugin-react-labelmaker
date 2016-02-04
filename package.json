@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-react-labelmaker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Adds displayName and props as data- attributes to React components",
   "main": "index.js",
   "keywords": [
