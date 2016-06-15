@@ -82,21 +82,24 @@ module.exports = function (babel) {
     };
 
     // find method called "render"
-    var renderMethodVisitor = {
-        ObjectProperty: function (path) {
-            var node = path.node;
+    var renderMethodVisitorFn = function (path) {
+        var node = path.node;
 
-            var displayName = this.displayName;
-            var propTypes = this.propTypes;
-            var context = {
-                displayName: displayName,
-                propTypes: propTypes
-            };
+        var displayName = this.displayName;
+        var propTypes = this.propTypes;
+        var context = {
+            displayName: displayName,
+            propTypes: propTypes
+        };
 
-            if (nameOrValueIs(path.node.key, 'render')) {
-                path.traverse(returnStatementVisitor, context);
-            }
+        if (nameOrValueIs(path.node.key, 'render')) {
+            path.traverse(returnStatementVisitor, context);
         }
+    };
+
+    var renderMethodVisitor = {
+        ObjectMethod: renderMethodVisitorFn,
+        ObjectProperty: renderMethodVisitorFn
     };
 
     // Finds CreateClass calls
